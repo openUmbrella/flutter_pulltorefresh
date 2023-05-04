@@ -1,3 +1,4 @@
+
 /*
  * Author: Jpeng
  * Email: peng8350@gmail.com
@@ -68,6 +69,7 @@ class RefreshLocalizations {
   Map<String, RefreshString> values = {
     'en': EnRefreshString(),
     'zh': ChRefreshString(),
+    'tw': TwRefreshString(),
     'fr': FrRefreshString(),
     'ru': RuRefreshString(),
     'uk': UkRefreshString(),
@@ -82,7 +84,20 @@ class RefreshLocalizations {
   };
 
   RefreshString? get currentLocalization {
-    if (values.containsKey(locale.languageCode)) {
+    if (locale.languageCode == 'zh') {
+      if (locale.scriptCode == null) {
+        // 再判断国家地区
+        if (locale.countryCode == 'CN') {
+          return values["zh"];
+        } else {
+          return values["tw"];
+        }
+      } else if (locale.scriptCode == 'Hans') {
+        return values["zh"];
+      } else {
+        return values["tw"];
+      }
+    } else if (values.containsKey(locale.languageCode)) {
       return values[locale.languageCode];
     }
     return values["en"];
@@ -198,6 +213,42 @@ class ChRefreshString implements RefreshString {
 
   @override
   String? refreshFailedText = "刷新失败";
+
+  @override
+  String? refreshingText = "刷新中…";
+}
+
+/// 繁体中文
+class TwRefreshString implements RefreshString {
+  @override
+  String? canLoadingText = "鬆手開始加載數據";
+
+  @override
+  String? canRefreshText = "鬆開開始刷新數據";
+
+  @override
+  String? canTwoLevelText = "釋放手勢,進入二樓";
+
+  @override
+  String? idleLoadingText = "上拉加載";
+
+  @override
+  String? idleRefreshText = "下拉刷新";
+
+  @override
+  String? loadFailedText = "加載失敗";
+
+  @override
+  String? loadingText = "加載中…";
+
+  @override
+  String? noMoreText = "沒有更多數據了";
+
+  @override
+  String? refreshCompleteText = "刷新成功";
+
+  @override
+  String? refreshFailedText = "刷新失敗";
 
   @override
   String? refreshingText = "刷新中…";
